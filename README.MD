@@ -1,5 +1,15 @@
 ## Real estate price comparator
 
+So far uses : frontend - React(Vite), backend - Django(rest framework)
+Also uses Docker
+
+Programming languages:
+-JavaScript
+-Python
+-HTML
+-CSS
+-SQL but through an ORM
+
 1. This project will scrape popular real estate websites in Slovakia and upload the data to a database.
 2. After that it will remove the duplicates (same properties on multiple sites).
 3. It will use skicit-learn to predict the future prices in each city and each sites and show an indicator similar to buy/sell on brokerage sites.
