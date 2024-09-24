@@ -46,4 +46,6 @@ for element in soup.find_all('div', {"class": "advertisement-item"}):
         else:
             price_per_m = float(stripped_prices[index+1:-8].replace(",", "."))
 
+    print(title)
     print(price, price_per_m)
+    print(imgs)
