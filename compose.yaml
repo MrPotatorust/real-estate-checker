@@ -1,6 +1,34 @@
-version: '3.8'
 services:
-  vite-react-app:
-    build: .
+  main-database:
+    image: postgres:16
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      
+  
+  backend:
+    build:
+      context: ./backend/api-server
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
     ports:
-      - "8080:80"
+      - "8000:8000"
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - main-database
+
+  airflow:
+    build:
+      context: ./backend/airflow
+      dockerfile: Dockerfile    
+    volumes:
+     - ./airflow:/opt/airflow
+    ports:
+      - "8080:8080"
+    command: airflow standalone
