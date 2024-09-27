@@ -8,7 +8,7 @@ Programming languages:
 -Python  
 -HTML  
 -CSS  
--SQL but through an ORM
+-SQL and an ORM
 
 1. This project will scrape popular real estate websites in Slovakia and upload the data to a database.  
 2. After that it will remove the duplicates (same properties on multiple sites).  
