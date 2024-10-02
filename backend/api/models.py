@@ -12,4 +12,3 @@ class FinalCard(models.Model):
     description = models.CharField(max_length=300)
     sq_meters = models.FloatField()
     price = models.FloatField()
-    
