@@ -7,4 +7,4 @@ class Person(models.Model):
     city = models.CharField(max_length=50)
     title = models.CharField(max_length=100)
     link = models.CharField(max_length=200)
-    imgs = ArrayField(models.CharField(max_length=100), blank=True) 
+    imgs = ArrayField(models.CharField(max_length=100), blank=True)
