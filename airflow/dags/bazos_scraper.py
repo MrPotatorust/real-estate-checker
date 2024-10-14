@@ -8,6 +8,8 @@ import time
 import json
 import logging
 
+from postal_code_local import getPreciseLocation
+
 
 
 
@@ -52,10 +54,11 @@ while not soup.find(string="Stránka nenájdená"):
         link = title_el.find("a").get("href")
 
         
-        element_loc = element.find(class_="inzeratylok").text
+        element_loc = element.find(class_="inzeratylok").text.replace("\r", "").replace("\n", "")
         first_num = re.search(r'\d', element_loc)
         if element_loc[:first_num.start()] not in slovak_cities:
             slovak_cities.append(element_loc[:first_num.start()])
+            postal_code = element_loc[first_num.start():]
             city = element_loc[:first_num.start()]
 
         
@@ -63,12 +66,13 @@ while not soup.find(string="Stránka nenájdená"):
         img = element.find("img").get("src")
         
         #print(img)
-        # print(repr(description))
-        print(description.replace("\r", "").replace("\n", ""))
+        print(description)
+        print(postal_code)
+        print(city)
+        print(getPreciseLocation(postal_code, f"{description} {title}"))
         print("--------------------------")
         # print(title)
         # print(f"https://reality.bazos.sk{link}")
-        # print(city)
 
     break
     counter += 20

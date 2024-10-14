@@ -3,8 +3,8 @@ import re
 import numpy as np
 import pandas as pd
 
-cur = "032 23"
-text = "Nádherný slnečný pozemok pri Liptovskej Mare Predám slnečný STAVEBNÝ pozemok v susedstve Liptovskej Mary s výhľadom na Vysoké a Nízke Tatry a možnosťou okamžitej stavby rekreačného alebo rodinného domu v obci Ižipovce. Nachádza sa v novoobjavenej liptovskej rekreačnej oblasti s vysokým investičným potenciálom, kde väčšina pozemkov je už zas ..."
+cur = "040 01"
+text = "STARÉ MESTO - KOMENSKÉHO SUPER 3 IZBOVÝ TEHLOVÝ BYT 120 M2."
 
 slovak_to_english = {
     'á': 'a', 'ä': 'a', 'č': 'c', 'ď': 'd', 'é': 'e', 'í': 'i', 'ĺ': 'l', 'ľ': 'l',
@@ -17,12 +17,13 @@ slovak_to_english = {
 def convert_slovak_to_english(text):
     return ''.join(slovak_to_english.get(char, char) for char in text)
 
+
 def getPreciseLocation(postal_code, text, slovak_to_english=slovak_to_english):
 
 
     lines_with_code = []
 
-    with open("./testing_scripts/SK.txt", "r", encoding="utf8") as file:
+    with open("./airflow/dags/SK.txt", "r", encoding="utf8") as file:
         lines = file.readlines()
         for line in lines:
             if cur in line:
@@ -37,6 +38,7 @@ def getPreciseLocation(postal_code, text, slovak_to_english=slovak_to_english):
             transformed_line = transformed_line[1]
         else:
             transformed_line = transformed_line[0]
+
         
         if convert_slovak_to_english(transformed_line) in convert_slovak_to_english(text.lower()):
             return saved_line
