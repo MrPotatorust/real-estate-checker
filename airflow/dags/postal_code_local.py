@@ -61,7 +61,7 @@ def get_unique():
 df = pd.DataFrame(get_unique())
 
 # Convert DataFrame to JSON using 'records' format
-df.to_json('./airflow/dags/unique_postal_codes.json', orient='records', indent=4)
+df.to_json('./airflow/dags/unique_postal_codes.json', indent=4)
 
 # Read the JSON file back into a DataFrame
 dd = pd.read_json('./airflow/dags/unique_postal_codes.json')
