@@ -47,7 +47,7 @@ def getPreciseLocation(postal_code, text, slovak_to_english=slovak_to_english):
 
 # print(getPreciseLocation(cur, text))
 
-def get_unique():
+def num_to_postal_code():
     unique_codes = []
 
     with open("./airflow/dags/SK.txt", "r", encoding="utf8") as file:
@@ -56,15 +56,30 @@ def get_unique():
             cur = line[3:9]
             if cur not in unique_codes:
                 unique_codes.append(cur)
-        return unique_codes
+        
+        df = pd.DataFrame(unique_codes)
+        df.to_json('./airflow/dags/num_to_postal_code.json', indent=4)
+        #dd = pd.read_json('./airflow/dags/postal_code_to_num.json')
+        # print(dd.head())
 
-df = pd.DataFrame(get_unique())
 
-# Convert DataFrame to JSON using 'records' format
-df.to_json('./airflow/dags/unique_postal_codes.json', indent=4)
+def postal_code_to_num():
+    unique_codes = {}
+    counter = 0
 
-# Read the JSON file back into a DataFrame
-dd = pd.read_json('./airflow/dags/unique_postal_codes.json')
+    with open("./airflow/dags/SK.txt", "r", encoding="utf8") as file:
+        lines = file.readlines()
+        for line in lines:
+            cur = line[3:9]
+            if cur not in unique_codes:
+                unique_codes[cur] = str(counter)
+                counter += 1
 
-# Preview the DataFrame
-print(dd.head())
+    print(unique_codes)       
+    with open("./airflow/dags/postal_code_to_num.json", 'w') as file:
+        json.dump(unique_codes, file)
+
+
+# FILE CREATE FUNCTIONS EXECUTE
+# postal_code_to_num()
+# num_to_postal_code()

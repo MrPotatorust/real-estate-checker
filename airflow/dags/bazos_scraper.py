@@ -18,6 +18,12 @@ logger = logging.getLogger(__name__)
 
 
 
+def database_matching(postal_code):
+    with open("./airflow/dags/postal_code_to_num.json", 'r') as json_file:
+        son1_data = json.load(json_file)
+    return son1_data
+
+
 dict1 = {
     "title": [],
     "price": [],
@@ -79,5 +85,4 @@ while not soup.find(string="Stránka nenájdená"):
     html_doc = getHtmlDoc(f"https://reality.bazos.sk/{counter}/")
     soup = BeautifulSoup(html_doc, "lxml")
     print(f"scraped page {counter}")
-
 
