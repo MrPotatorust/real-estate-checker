@@ -12,6 +12,8 @@ import time
 import json
 import logging
 
+from custom_functions import convert_to_postal_code, getHtmlDoc
+
 
 
 
@@ -42,15 +44,6 @@ def scraping():
 
     # slovak_cities=['bratislava', 'kosice', 'presov', 'zilina', 'nitra', 'banska-bystrica', 'trnava', 'trencin', 'martin', 'poprad', 'prievidza', 'zvolen', 'povazska-bystrica', 'nove-zamky', 'michalovce', 'spisska-nova-ves', 'komarno', 'levice', 'liptovsky-mikulas', 'humenne', 'bardejov', 'piestany', 'ruzomberok', 'lucenec', 'pezinok', 'topolcany', 'dunajska-streda', 'trebisov', 'cadca', 'dubnica-nad-vahom', 'rimavska-sobota', 'partizanske', 'vranov-nad-toplou', 'sala', 'senec', 'brezno', 'hlohovec', 'nove-mesto-nad-vahom', 'senica', 'malacky', 'snina', 'dolny-kubin', 'roznava', 'puchov', 'ziar-nad-hronom', 'banovce-nad-bebravou', 'stara-lubovna', 'handlova', 'skalica', 'galanta', 'kezmarok', 'sered', 'kysucke-nove-mesto', 'levoca', 'samorin', 'detva', 'stupava', 'sabinov', 'zlate-moravce', 'bytca', 'revuca', 'holic', 'myjava', 'velky-krtis', 'kolarovo', 'nova-dubnica', 'moldava-nad-bodvou', 'stropkov', 'svidnik', 'filakovo', 'sturovo', 'banska-stiavnica', 'surany', 'modra', 'tvrdosin', 'krompachy', 'secovce', 'velke-kapusany', 'stara-tura', 'vrable', 'velky-meder', 'svit', 'krupina', 'namestovo', 'vrutky', 'kralovsky-chlmec', 'hurbanovo', 'hrinova', 'liptovsky-hradok', 'sahy', 'trstena', 'turzovka', 'velky-saris', 'nova-bana', 'tornala', 'spisska-bela', 'zeliezovce', 'krasno-nad-kysucou', 'hnusta', 'lipany', 'nemsova', 'turcianske-teplice', 'svaty-jur', 'sobrance', 'gelnica', 'rajec', 'medzilaborce', 'zarnovica', 'vrbove', 'ilava', 'sladkovicovo', 'gabcikovo', 'poltar', 'dobsina', 'bojnice', 'nesvady', 'sastin-straze', 'gbely', 'sliac', 'kremnica', 'brezova-pod-bradlom', 'strazske', 'novaky', 'medzev', 'turany', 'giraltovce', 'trencianske-teplice', 'leopoldov', 'vysoke-tatry', 'spisske-podhradie', 'hanusovce-nad-toplou', 'tisovec', 'tlmace', 'cierna-nad-tisou', 'spisske-vlachy', 'jelsava', 'podolinec', 'rajecke-teplice', 'spisska-stara-ves', 'modry-kamen', 'dudince']
 
-
-
-    def getHtmlDoc(url):
-
-        response = requests.get(url)
-
-
-        return response.text
-
     dict1 = {
         "title": [],
         "price": [],
@@ -58,8 +51,10 @@ def scraping():
         "img": [],
         "link": [],
         "location": [],
-        "location_description": [],
-        "buy": [],
+        "postal_code":[],
+        'rentable': [],
+        'property_type': [],
+        'site':[]
     }
 
 
@@ -75,6 +70,7 @@ def scraping():
         
 
     while not page_counter or not soup.find(string="Nenašli sa žiadne výsledky"):
+        start = time.time()
         page_counter +=1
 
         url = f"https://www.nehnutelnosti.sk/vyhladavanie/?p[page]={page_counter}"
@@ -84,7 +80,6 @@ def scraping():
         html_doc = getHtmlDoc(url)
         soup = BeautifulSoup(html_doc, 'lxml')
 
-        start = time.time()
 
         
         for element in soup.find_all('div', {"class": "advertisement-item"}):
@@ -100,17 +95,24 @@ def scraping():
 
 
             stripped_prices = element.find(class_="advertisement-item--content__price").text.replace(" ", "").strip()
-
+            if 'mes.' in stripped_prices:
+                rentable = True
+            else:
+                rentable = False
             sq_m_el = element.find_all(class_="advertisement-item--content__info")
 
             for i in sq_m_el:
                 i = i.text.strip()
                 sq_m_index = i.find("•")
+                comma_check = i.find(',')
 
                 if sq_m_index != -1:
                     sq_m = float(i[sq_m_index+2:-3].replace(",", "."))
+                    property_type = i[:sq_m_index].strip()
+                elif comma_check != -1:
+                    location = i
                 else:
-                    location_description = i
+                    property_type = i[:sq_m_index+1].strip()
 
 
             # checks if the price is actually a number
@@ -125,27 +127,39 @@ def scraping():
                 price = None
 
 
+            postal_code = convert_to_postal_code(location)
+
+
             dict1["title"].append(title)
-            dict1["location_description"].append(location_description)
+            dict1["location"].append(location)
             dict1["sq_m"].append(sq_m)
             dict1["price"].append(price)
             dict1["link"].append(link)
             dict1["img"].append(img)
+            dict1['postal_code'].append(postal_code)
+            dict1['rentable'].append(rentable)
+            dict1['property_type'].append(property_type)
+            dict1['site'].append(1)
 
             print(title)
-            print(location_description)
+            print(location)
             print(sq_m)
             print(price)
             print(link)
             print(img)
-            # print(description)
+            print(postal_code)
+            print(description)
+            print(rentable)
+            print(property_type)
+            print('---------------------')
+            
 
 
 
             
         end=time.time()
 
-        logger.info(f"Scraped page took {start-end}")
+        logger.info(f"Scraped page took {end-start}")
 
 
     main_end = time.time()

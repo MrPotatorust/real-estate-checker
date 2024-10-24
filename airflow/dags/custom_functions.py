@@ -2,9 +2,30 @@ import json
 import re
 import numpy as np
 import pandas as pd
+import requests
 
 cur = "040 01"
 text = "STARÉ MESTO - KOMENSKÉHO SUPER 3 IZBOVÝ TEHLOVÝ BYT 120 M2."
+
+
+replace = {
+    ' I - ':'-',
+    ' II - ':'-',
+    ' III - ':'-',
+    ' IV - ':'-',
+    ' V - ':'-',
+    ' VI - ':'-',
+    ' VII - ':'-',
+    ' VIII - ':'-',
+    ' IX - ':'-',
+    ' X - ':'-'
+}
+
+def getHtmlDoc(url):
+    response = requests.get(url)
+
+
+    return response.text
 
 
 def convert_to_postal_code(location):
@@ -14,17 +35,28 @@ def convert_to_postal_code(location):
         for index, char in enumerate(location):
             if char == ',':
                 comma_locations.append(index)
-        lookup_location = location[comma_locations[0]+2:comma_locations[1]]
+        lookup_location = location[comma_locations[-2]+2:comma_locations[-1]]
     else:
         lookup_location = location[:location.index(",")]
+
+    if '-' in lookup_location:
+        for word, initial in replace.items():
+            lookup_location = lookup_location.replace(word, initial)
+
     
-    return lookup_location
+    with open('airflow/dags/SK.txt', 'r', encoding='utf8' ) as file:
+        lines = file.readlines()
+        for line in lines:
+            stripped_line = line[10:]
+            line_city = stripped_line[:stripped_line.find('\t')]
+            if line_city == lookup_location:
+                return line[3:10]
 
 
             
 
 
-print(convert_to_postal_code(" Trnava, okres Trnava"))
+#print(convert_to_postal_code("Veľká Lomnica, Kamenná ul., Vysoké Tatry, okres Poprad"))
 
 # slovak_to_english = {
 #     'á': 'a', 'ä': 'a', 'č': 'c', 'ď': 'd', 'é': 'e', 'í': 'i', 'ĺ': 'l', 'ľ': 'l',
