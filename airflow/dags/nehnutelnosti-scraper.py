@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
-# from airflow import DAG
-# from airflow.operators.python import PythonOperator
+from airflow import DAG
+from airflow.operators.python import PythonOperator
 
 from bs4 import BeautifulSoup, NavigableString
 import requests
@@ -17,22 +17,22 @@ from custom_functions import convert_to_postal_code, getHtmlDoc
 
 
 
-# default_args = {
-#     'owner': 'airflow',
-#     'depends_on_past': False,
-#     'start_date': datetime(2023, 1, 1),
-#     'email_on_failure': False,
-#     'email_on_retry': False,
-#     'retries': 1,
-#     'retry_delay': timedelta(minutes=5),
-# }
+default_args = {
+    'owner': 'airflow',
+    'depends_on_past': False,
+    'start_date': datetime(2023, 1, 1),
+    'email_on_failure': False,
+    'email_on_retry': False,
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5),
+}
 
-# my_dag = DAG(
-#     dag_id = "Nehnutelnosti_scraper",
-#     default_args=default_args,
-#     description="Scrapes and converts to dataframe",
-#     schedule_interval=timedelta(days=1),
-# )
+my_dag = DAG(
+    dag_id = "Nehnutelnosti_scraper",
+    default_args=default_args,
+    description="Scrapes and converts to dataframe",
+    schedule_interval=timedelta(days=1),
+)
 
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -57,8 +57,6 @@ def scraping():
         'site':[]
     }
 
-
-        
 
 
     logger.info("Started scraping nehnutelnosti.sk")
@@ -141,17 +139,17 @@ def scraping():
             dict1['property_type'].append(property_type)
             dict1['site'].append(1)
 
-            print(title)
-            print(location)
-            print(sq_m)
-            print(price)
-            print(link)
-            print(img)
-            print(postal_code)
-            print(description)
-            print(rentable)
-            print(property_type)
-            print('---------------------')
+            # print(title)
+            # print(location)
+            # print(sq_m)
+            # print(price)
+            # print(link)
+            # print(img)
+            # print(postal_code)
+            # print(description)
+            # print(rentable)
+            # print(property_type)
+            # print('---------------------')
             
 
 
@@ -168,7 +166,6 @@ def scraping():
 
     return dict1
 
-scraping()
 
 def converting_to_df(ti):
     scraping_dict = ti.xcom_pull(task_ids="scraping")
@@ -182,16 +179,16 @@ def converting_to_df(ti):
     logger.info("Finished converting to dataframe")
 
 
-# scraping = PythonOperator(
-#     task_id="scraping",
-#     python_callable=scraping,
-#     dag=my_dag,
-# )
+scraping = PythonOperator(
+    task_id="scraping",
+    python_callable=scraping,
+    dag=my_dag,
+)
 
-# converting_to_df = PythonOperator(
-#     task_id="converting_to_df",
-#     python_callable=converting_to_df,
-#     dag=my_dag,
-# )
+converting_to_df = PythonOperator(
+    task_id="converting_to_df",
+    python_callable=converting_to_df,
+    dag=my_dag,
+)
 
-# scraping >> converting_to_df
+scraping >> converting_to_df

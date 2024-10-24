@@ -44,7 +44,7 @@ def convert_to_postal_code(location):
             lookup_location = lookup_location.replace(word, initial)
 
     
-    with open('airflow/dags/SK.txt', 'r', encoding='utf8' ) as file:
+    with open('SK.txt', 'r', encoding='utf8' ) as file:
         lines = file.readlines()
         for line in lines:
             stripped_line = line[10:]
