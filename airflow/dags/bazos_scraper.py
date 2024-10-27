@@ -1,11 +1,13 @@
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
+from airflow.hooks.base_hook import BaseHook
 
 from bs4 import BeautifulSoup, NavigableString
 import requests
 from lxml import etree
 import re
+from sqlalchemy import create_engine, text
 import pandas as pd
 import numpy as np
 import time
@@ -29,7 +31,8 @@ my_dag = DAG(
     dag_id = "Bazos_scraper",
     default_args=default_args,
     description="Scrapes and converts to dataframe",
-    schedule_interval=timedelta(days=1),
+    #schedule_interval=timedelta(days=1),
+    schedule=None,
 )
 
 
@@ -57,7 +60,7 @@ def scraping():
 
 
 
-
+    start = time.time()
 
     html_doc = getHtmlDoc("https://reality.bazos.sk/")
     soup = BeautifulSoup(html_doc, "lxml")
@@ -116,6 +119,12 @@ def scraping():
         soup = BeautifulSoup(html_doc, "lxml")
         logger.info(f"scraped page {counter}")
 
+        break
+
+    end = time.time()
+
+    logger.info(f"Took: {end-start} seconds")
+
     return dict1
 
 
@@ -125,10 +134,18 @@ def converting_to_df(ti):
     logger.info("Converting to dataframe")
 
     df = pd.DataFrame.from_dict(scraping_dict)
+    df.index.rename('id')
 
-    print(df)
+    print(df.head())
+
 
     logger.info("Finished converting to dataframe")
+
+    conn_vars = BaseHook.get_connection('staging_db')
+    engine = create_engine(f'postgresql://{conn_vars.login}:{conn_vars.password}@{conn_vars.host}:{conn_vars.port}/{conn_vars.schema}')
+
+    df.to_sql(name="property_listings", con=engine, if_exists='append')
+
 
 
 scraping = PythonOperator(

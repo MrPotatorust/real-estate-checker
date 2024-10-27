@@ -3,22 +3,22 @@ from bs4 import BeautifulSoup, NavigableString
 from lxml import etree
 import re
 
-url = "http://www.sodbtn.sk/obce/abeceda.php"
+# url = "http://www.sodbtn.sk/obce/abeceda.php"
 
 
-def getHtmlDoc(url):
+# def getHtmlDoc(url):
 
-    response = requests.get(url)
+#     response = requests.get(url)
 
-    return response.text
+#     return response.text
 
-htmldoc = getHtmlDoc("https://sk.wikipedia.org/wiki/Zoznam_miest_na_Slovensku")
+# htmldoc = getHtmlDoc("https://sk.wikipedia.org/wiki/Zoznam_miest_na_Slovensku")
 
-soup = BeautifulSoup(htmldoc, "lxml")
+# soup = BeautifulSoup(htmldoc, "lxml")
 
-table = soup.find_all("table")[-1]
+# table = soup.find_all("table")[-1]
 
-print(table)
+# print(table)
 
 
 # slovak_to_english = {
@@ -210,3 +210,33 @@ print(table)
 #     print(link)
 #     print(img)
 #     print(description)
+
+
+
+dict1 = {
+    "title": [],
+    "price": [],
+    "sq_m": [],
+    "img": [],
+    "link": [],
+    "location": [],
+    "postal_code":[],
+    'rentable': [],
+    'property_type': [],
+    'site':[]
+}
+
+data = {
+    'title': 'Sample Property',
+    'price': 250000.00,
+    'sq_m': 100,
+    'img': 'http://example.com/image.jpg',
+    'link': 'http://example.com/property',
+    'location': 'Prague',
+    'postal_code': '12000',
+    'rentable': True,
+    'property_type': 'Apartment',
+    'site': 'example.com'
+}
+
+print(data.values())
