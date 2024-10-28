@@ -22,7 +22,7 @@ from custom_functions import getHtmlDoc
 Base = declarative_base()
 
 class Advertisement(Base):
-    __tablename__ = "property_listings"
+    __tablename__ = "property_listings_bazos"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     
