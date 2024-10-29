@@ -1,0 +1,17 @@
+nav {
+  padding: 20px;
+  background-color: black;
+}
+
+.nav--ul {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  align-items: center;
+  margin: 0;
+}
+
+.nav--ul li {
+  padding-right: 2rem;
+  color: white;
+}
