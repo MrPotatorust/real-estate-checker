@@ -1,5 +1,4 @@
 nav {
-  padding: 20px;
   background-color: black;
 }
 
@@ -11,7 +10,13 @@ nav {
   margin: 0;
 }
 
-.nav--ul li {
+.nav--heading a {
   padding-right: 2rem;
   color: white;
+  text-decoration: none;
+}
+
+.nav--dropdown:hover > .nav--dropdown {
+  display: block;
+  margin-top: 0;
 }
