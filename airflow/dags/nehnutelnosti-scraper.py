@@ -15,7 +15,7 @@ import logging
 
 from sqlalchemy import create_engine, text, Column, String, Integer, CHAR, Boolean, Float, DateTime, null
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker 
 
 from custom_functions import convert_to_postal_code, getHtmlDoc
 
@@ -199,7 +199,7 @@ def scraping():
             # dict1['property_type'].append(property_type)
             # dict1['site'].append(1)
 
-            advertisement = Advertisement(title=title, price=price, sq_m=null(), img=img, link=link, location=location, postal_code=postal_code, rentable=null(), property_type=null(), site=1, datetime=cur_time)
+            advertisement = Advertisement(title=title, price=price, sq_m=sq_m, img=img, link=link, location=location, postal_code=postal_code, rentable=null(), property_type=null(), site=1, datetime=cur_time)
 
             # print(title)
             # print(location)

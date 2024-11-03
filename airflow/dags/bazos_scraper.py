@@ -96,9 +96,6 @@ logger = logging.getLogger(__name__)
 
 def scraping(Advertisement = Advertisement, session = session):
 
-    logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-    logger = logging.getLogger(__name__)
-
 
     cur_time = datetime.utcnow()
 

@@ -50,8 +50,7 @@ def convert_to_postal_code(location):
             stripped_line = line[10:]
             line_city = stripped_line[:stripped_line.find('\t')]
             if line_city == lookup_location:
-                return line[3:10]
-
+                return line[3:9]
 
             
 
