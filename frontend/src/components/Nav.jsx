@@ -24,6 +24,11 @@ export default function Nav() {
             <Link to={"about-us"}>Kto sme?</Link>
           </h3>
         </li>
+        <li>
+          <h3 className="nav--heading">
+            <Link to={"test-fetch"}>test</Link>
+          </h3>
+        </li>
       </ul>
     </nav>
   );

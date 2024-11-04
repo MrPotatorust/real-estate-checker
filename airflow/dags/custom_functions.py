@@ -4,6 +4,9 @@ import numpy as np
 import pandas as pd
 import requests
 
+from sqlalchemy import create_engine, text, Column, String, Integer, CHAR, Boolean, Float, DateTime, null, Text
+from sqlalchemy.ext.declarative import declarative_base
+
 cur = "040 01"
 text = "STARÉ MESTO - KOMENSKÉHO SUPER 3 IZBOVÝ TEHLOVÝ BYT 120 M2."
 
@@ -52,7 +55,7 @@ def convert_to_postal_code(location):
             if line_city == lookup_location:
                 return line[3:9]
 
-            
+        
 
 
 #print(convert_to_postal_code("Veľká Lomnica, Kamenná ul., Vysoké Tatry, okres Poprad"))

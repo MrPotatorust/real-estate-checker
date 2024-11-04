@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup, NavigableString
 import requests
 from lxml import etree
 import re
-from sqlalchemy import create_engine, text, Column, String, Integer, CHAR, Boolean, Float, DateTime, null
+from sqlalchemy import create_engine, text, Column, String, Integer, CHAR, Boolean, Float, DateTime, null, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import pandas as pd
@@ -36,10 +36,11 @@ class Advertisement(Base):
     rentable = Column(Boolean, nullable=True)
     property_type = Column(String, nullable=True)
     site = Column(Integer)
+    description = Column(Text)
     datetime = Column(DateTime)
 
     def __init__(self, title, price, sq_m, img, link, location, postal_code, 
-                rentable, property_type, site, datetime, id=None):
+                rentable, property_type, site, datetime, description, id=None):
         self.id = id
         self.title = title
         self.price = price
@@ -51,6 +52,7 @@ class Advertisement(Base):
         self.rentable = rentable
         self.property_type = property_type
         self.site = site
+        self.description = description
         self.datetime = datetime
 
     def __repr__(self):
@@ -159,7 +161,7 @@ def scraping(Advertisement = Advertisement, session = session):
             # dict1["property_type"].append(None)
             # dict1["site"].append(2)
 
-            advertisement = Advertisement(title=title, price=price, sq_m=null(), img=img, link=link, location=city, postal_code=postal_code, rentable=null(), property_type=null(), site=2, datetime=cur_time)
+            advertisement = Advertisement(title=title, price=price, sq_m=null(), img=img, link=link, location=city, postal_code=postal_code, rentable=null(), property_type=null(), site=2, description=description, datetime=cur_time)
 
             session.add(advertisement)
 
@@ -178,13 +180,15 @@ def scraping(Advertisement = Advertisement, session = session):
         soup = BeautifulSoup(html_doc, "lxml")
         logger.info(f"scraped page {counter}")
 
+        break
+
+
 
     end = time.time()
 
     logger.info(f"Took: {end-start} seconds")
 
     session.commit()
-
 
 
 scraping = PythonOperator(

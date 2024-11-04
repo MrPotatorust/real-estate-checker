@@ -11,7 +11,7 @@ from rest_framework.decorators import api_view
 
 
 @api_view(['GET'])
-def test(request):
-    queryset = Advertisement.objects.all()[:10]
+def test(request, site):
+    queryset = Advertisement.objects.filter(site=site)[:10]
     print(queryset)
     return Response(AdvertisementSerializer(queryset, many=True).data)
