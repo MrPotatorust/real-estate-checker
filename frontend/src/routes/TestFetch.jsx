@@ -15,16 +15,22 @@ export default function TestFetch() {
   console.log(advertisements);
   console.log(site);
 
-  const mappedAdvertisements = advertisements.map((advertisement) => (
-    <div key={advertisement.id} className="advertisement">
-      <h3>
-        <a href={advertisement.link}>{advertisement.title}</a>
-      </h3>
-      <img src={advertisement.img} alt="advertisement image" />
-      <p>{advertisement.price}</p>
-      <p>{}</p>
-    </div>
-  ));
+  let mappedAdvertisements;
+
+  if (advertisements == Object) {
+    mappedAdvertisements = advertisements.map((advertisement) => (
+      <div key={advertisement.id} className="advertisement">
+        <h3>
+          <a href={advertisement.link}>{advertisement.title}</a>
+        </h3>
+        <img src={advertisement.img} alt="advertisement image" />
+        <p>{advertisement.price}</p>
+      </div>
+    ));
+  } else {
+    mappedAdvertisements = advertisements;
+  }
+
   return (
     <div>
       <select
