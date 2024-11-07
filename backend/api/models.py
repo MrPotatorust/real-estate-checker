@@ -1,14 +1,21 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
+
 # Create your models here.
+class Advertisement(models.Model):
+    title = models.CharField(max_length=255)
+    price = models.FloatField(null=True)
+    sq_m = models.FloatField(null=True)
+    img = models.CharField(max_length=255)
+    link = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
+    postal_code = models.CharField(max_length=10)
+    rentable = models.BooleanField(null=True)
+    property_type = models.CharField(max_length=100, null=True)
+    site = models.IntegerField()
+    datetime = models.DateTimeField()
 
+    class Meta:
+        db_table = 'property_listings_merged'
 
-class FinalCard(models.Model):
-    city = models.CharField(max_length=50)
-    title = models.CharField(max_length=200)
-    link = models.CharField(max_length=300)
-    img = models.CharField(max_length=300)
-    location_description = models.CharField(max_length=200)
-    description = models.CharField(max_length=300)
-    sq_meters = models.FloatField()
-    price = models.FloatField()
+    def __str__(self):
+        return self.title
