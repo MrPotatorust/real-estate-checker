@@ -180,7 +180,6 @@ def scraping(Advertisement = Advertisement, session = session):
         soup = BeautifulSoup(html_doc, "lxml")
         logger.info(f"scraped page {counter}")
 
-        break
 
 
 
