@@ -3,46 +3,67 @@ import { testGet } from "../apiCalls";
 
 export default function TestFetch() {
   const [advertisements, setAdvertisements] = useState([]);
-  const [site, setSite] = useState([1]);
-
-  useEffect(() => {
-    async function promiseResolution() {
-      setAdvertisements(await testGet(site));
-    }
-    promiseResolution();
-  }, [site]);
-
-  console.log(advertisements);
-  console.log(site);
-
+  const [lookupField, setLookupFields] = useState({
+    site_select: "1",
+    lookup_word: "",
+  });
   let mappedAdvertisements;
 
-  if (advertisements == Object) {
-    mappedAdvertisements = advertisements.map((advertisement) => (
-      <div key={advertisement.id} className="advertisement">
-        <h3>
-          <a href={advertisement.link}>{advertisement.title}</a>
-        </h3>
-        <img src={advertisement.img} alt="advertisement image" />
-        <p>{advertisement.price}</p>
-      </div>
-    ));
-  } else {
-    mappedAdvertisements = advertisements;
+  async function promiseResolution() {
+    setAdvertisements(
+      await testGet(lookupField.site_select, lookupField.lookup_word)
+    );
   }
 
+  function handleChange(e) {
+    let { name, value } = e.target;
+    console.log(name, value);
+  }
+
+  useEffect(() => {
+    promiseResolution();
+  }, []);
+
+  // mappedAdvertisements = advertisements.map((advertisement) => (
+  //   <div key={advertisement.id} className="advertisement">
+  //     <h3>
+  //       <a href={advertisement.link}>{advertisement.title}</a>
+  //     </h3>
+  //     <img src={advertisement.img} alt="advertisement image" />
+  //     <p>{advertisement.price}</p>
+  //   </div>
+  // ));
+
   return (
-    <div>
-      <select
-        name="site_select"
-        id="site_select"
-        onChange={(e) => setSite(() => e.target.value)}
-      >
-        <option value="1">1</option>
-        <option value="2">2</option>
-      </select>
-      <h2>NOOOOO</h2>
-      {mappedAdvertisements}
+    <div className="container">
+      <div className="filter-fetch">
+        <form>
+          <input
+            type="text"
+            name="lookup_word"
+            value={lookupField.lookup_word}
+            onChange={(e) => handleChange(e)}
+          />
+          <select
+            name="site_select"
+            id="site_select"
+            value={lookupField.site_select}
+            onChange={(e) => handleChange(e)}
+          >
+            <option value="1">1</option>
+            <option value="2">2</option>
+          </select>
+          <button type="button" onClick={promiseResolution}>
+            Refresh
+          </button>
+        </form>
+      </div>
+      <h2>Advertisements</h2>
+      {/* {mappedAdvertisements.length > 0 ? (
+        mappedAdvertisements
+      ) : (
+        <p>Nothing to find</p>
+      )} */}
     </div>
   );
 }

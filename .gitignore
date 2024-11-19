@@ -1,3 +1,5 @@
 .venv
 airflow/logs/
 volumes/logs/
+airflow/data/
+testing_scripts/data/
