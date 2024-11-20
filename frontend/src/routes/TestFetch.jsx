@@ -6,6 +6,7 @@ export default function TestFetch() {
   const [lookupField, setLookupFields] = useState({
     site_select: "1",
     lookup_word: "",
+    slider: "",
   });
 
   let mappedAdvertisements;
@@ -60,6 +61,18 @@ export default function TestFetch() {
             Refresh
           </button>
         </form>
+        <div class="slidecontainer">
+          <input
+            type="range"
+            min="1"
+            max="100"
+            className="slider"
+            id="myRange"
+            name="slider"
+            value={lookupField.slider}
+            onChange={handleChange}
+          />
+        </div>
       </div>
       <h2>Advertisements</h2>
       {mappedAdvertisements.length > 0 ? (
