@@ -12,6 +12,10 @@ from rest_framework.decorators import api_view
 
 @api_view(['GET'])
 def test(request, site, lookup_word):
-    queryset = Advertisement.objects.filter(title__contains=lookup_word).filter(site=site)[:10]
+    if lookup_word == "%$*any":
+        print("any")
+        queryset = Advertisement.objects.filter(site=site)[:10]
+    else:
+        queryset = Advertisement.objects.filter(title__contains=lookup_word).filter(site=site)[:10]
     print(queryset)
     return Response(AdvertisementSerializer(queryset, many=True).data)

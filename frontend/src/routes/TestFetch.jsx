@@ -7,6 +7,7 @@ export default function TestFetch() {
     site_select: "1",
     lookup_word: "",
   });
+
   let mappedAdvertisements;
 
   async function promiseResolution() {
@@ -17,22 +18,24 @@ export default function TestFetch() {
 
   function handleChange(e) {
     let { name, value } = e.target;
-    console.log(name, value);
+    setLookupFields((adverts) => {
+      return { ...adverts, [name]: value };
+    });
   }
 
   useEffect(() => {
     promiseResolution();
   }, []);
 
-  // mappedAdvertisements = advertisements.map((advertisement) => (
-  //   <div key={advertisement.id} className="advertisement">
-  //     <h3>
-  //       <a href={advertisement.link}>{advertisement.title}</a>
-  //     </h3>
-  //     <img src={advertisement.img} alt="advertisement image" />
-  //     <p>{advertisement.price}</p>
-  //   </div>
-  // ));
+  mappedAdvertisements = advertisements.map((advertisement) => (
+    <div key={advertisement.id} className="advertisement">
+      <h3>
+        <a href={advertisement.link}>{advertisement.title}</a>
+      </h3>
+      <img src={advertisement.img} alt="advertisement image" />
+      <p>{advertisement.price}</p>
+    </div>
+  ));
 
   return (
     <div className="container">
@@ -59,11 +62,11 @@ export default function TestFetch() {
         </form>
       </div>
       <h2>Advertisements</h2>
-      {/* {mappedAdvertisements.length > 0 ? (
+      {mappedAdvertisements.length > 0 ? (
         mappedAdvertisements
       ) : (
         <p>Nothing to find</p>
-      )} */}
+      )}
     </div>
   );
 }
