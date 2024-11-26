@@ -4,17 +4,17 @@ import { testGet } from "../apiCalls";
 export default function TestFetch() {
   const [advertisements, setAdvertisements] = useState([]);
   const [lookupField, setLookupFields] = useState({
-    site_select: "1",
-    lookup_word: "",
+    siteSelect: "1",
+    lookupWord: "",
     slider: "",
+    minPrice: "",
+    maxPrice: "",
   });
 
   let mappedAdvertisements;
 
   async function promiseResolution() {
-    setAdvertisements(
-      await testGet(lookupField.site_select, lookupField.lookup_word)
-    );
+    setAdvertisements(await testGet(lookupField));
   }
 
   function handleChange(e) {
@@ -38,19 +38,42 @@ export default function TestFetch() {
     </div>
   ));
 
+  console.log(lookupField.slider);
+
   return (
     <div className="container">
       <div className="filter-fetch">
         <form>
-          <input
-            type="text"
-            name="lookup_word"
-            value={lookupField.lookup_word}
-            onChange={(e) => handleChange(e)}
-          />
+          <label>
+            Lookup word
+            <input
+              type="text"
+              name="lookupWord"
+              value={lookupField.lookup_word}
+              onChange={(e) => handleChange(e)}
+            />
+          </label>
+          <label>
+            Minimum price
+            <input
+              type="text"
+              name="minPrice"
+              value={lookupField.minimum_price}
+              onChange={(e) => handleChange(e)}
+            />
+          </label>
+          <label>
+            Maximum price
+            <input
+              type="text"
+              name="maxPrice"
+              value={lookupField.maximum_price}
+              onChange={(e) => handleChange(e)}
+            />
+          </label>
           <select
-            name="site_select"
-            id="site_select"
+            name="siteSelect"
+            id="site-select"
             value={lookupField.site_select}
             onChange={(e) => handleChange(e)}
           >
@@ -61,18 +84,6 @@ export default function TestFetch() {
             Refresh
           </button>
         </form>
-        <div class="slidecontainer">
-          <input
-            type="range"
-            min="1"
-            max="100"
-            className="slider"
-            id="myRange"
-            name="slider"
-            value={lookupField.slider}
-            onChange={handleChange}
-          />
-        </div>
       </div>
       <h2>Advertisements</h2>
       {mappedAdvertisements.length > 0 ? (

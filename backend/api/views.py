@@ -11,7 +11,7 @@ from rest_framework.decorators import api_view
 
 
 @api_view(['GET'])
-def test(request, site, lookup_word):
+def test(request, site, lookup_word, min_price, max_price):
     if lookup_word == "%$*any":
         print("any")
         queryset = Advertisement.objects.filter(site=site)[:10]
